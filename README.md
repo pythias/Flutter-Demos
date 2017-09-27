@@ -12,10 +12,11 @@ git clone https://github.com/pythias/Flutter-Demos.git
 
 ## Index
 
-1. [Hello World](#demo01)
-1. [Title Bar](#demo02)
-1. [Buttons and Actions](#demo03)
-1. [List View](#demo04)
+1. [Hello World](#demo01-hello-world)
+1. [Title Bar](#demo02-title-bar)
+1. [Buttons and Actions](#demo03-buttons-and-actions)
+1. [List View](#demo04-list-view)
+1. [Navigation](#demo05-navigation)
 
 ---
 
@@ -121,6 +122,40 @@ class _NewToDoState extends State<ToDoList> {
   void _addButtonClicked() {
     setState(() {
       _list.add(new ListTile(title: new Text('List Item ${_list.length}')));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Title'),
+        actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.add), onPressed: _addButtonClicked),
+        ],
+      ),
+      body: new ListView(
+        children: _list.map((item) => item).toList(),
+      ),
+    );
+  }
+}
+```
+
+## Demo05: Navigation
+
+Mobile apps typically reveal their contents via full-screen elements called "screens" or "pages". In Flutter these elements are called routes and they're managed by a [Navigator](https://docs.flutter.io/flutter/widgets/Navigator-class.html) widget. The navigator manages a stack of [Route](https://docs.flutter.io/flutter/widgets/Route-class.html) objects and provides methods for managing the stack, like [Navigator.push](https://docs.flutter.io/flutter/widgets/Navigator/push.html) and [Navigator.pop](https://docs.flutter.io/flutter/widgets/Navigator/pop.html).
+
+Although you can create a navigator directly, it's most common to use the navigator created by a WidgetsApp or a MaterialApp widget. You can refer to that navigator with [Navigator.of](https://docs.flutter.io/flutter/widgets/Navigator/of.html).
+
+```dart
+class _ToDoListState extends State<ToDoList> {
+  List<Widget> _list = [];
+
+  Future<Null> _addButtonClicked() async {
+    String text = await Navigator.of(context).push(new MaterialPageRoute<String>(builder: (BuildContext context) => new CreateToDo()));
+    setState(() {
+      _list.add(new ListTile(title: new Text(text)));
     });
   }
 
